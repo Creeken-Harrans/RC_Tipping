@@ -2,7 +2,7 @@
 Reservoir Computing Model for Tipping Prediction
 with the help of Shirin Panahi, Ling-wei Kong, and Zhengmeng Zhai.
 
-This is the repository for our preprint titled **"Machine-learning Prediction of Tipping with Applications to the Atlantic Meridional Overturning Circulation"**. This research focuses on using Reservoir Computing (RC) models to predict tipping points in complex systems, with a particular emphasis on the Atlantic Meridional Overturning Circulation (AMOC). 
+This is the repository for our paper titled **"Machine learning prediction of tipping in complex dynamical systems"**. This research focuses on using Reservoir Computing (RC) models to predict tipping points in complex systems, with a particular emphasis on the Atlantic Meridional Overturning Circulation (AMOC). 
 
 
 ## Project Overview
