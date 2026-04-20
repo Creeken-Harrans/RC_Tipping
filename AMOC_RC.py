@@ -25,18 +25,24 @@ import matplotlib.pyplot as plt
 import os 
 import pandas as pd
 from aux_funcs import *
-from bayes_opt import BayesianOptimization
 import pickle
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+HYPER_DIR = os.path.join(BASE_DIR, 'hyperparameter')
+FIGURE_DIR = os.path.join(BASE_DIR, 'figures')
+
 name = 'CESM_data' # CESM_data, amoc_2d
-path = 'data/'+ name + '.pkl'
-res_path = f"data"
-res_path_hyper = f"hyperparameter"
+path = os.path.join(DATA_DIR, name + '.pkl')
+res_path = DATA_DIR
+res_path_hyper = HYPER_DIR
 phase = 'Training'                      #'Hyperparameter_optimization'  # 'Training'
 
 
 if not os.path.exists(res_path):
     os.makedirs(res_path)
+if not os.path.exists(FIGURE_DIR):
+    os.makedirs(FIGURE_DIR)
 
 if not os.path.exists(path):
     print('Generating data. This might take a bit!')
@@ -55,6 +61,7 @@ else:
 
 
 if phase == 'Hyperparameter_optimization':
+    from bayes_opt import BayesianOptimization
     
     if not os.path.exists(res_path_hyper):
         os.makedirs(res_path_hyper)
@@ -118,7 +125,7 @@ if phase == 'Hyperparameter_optimization':
     print('amoc')
     print(optimizer.max)
 
-    pkl_file = open('./hyperparameter/rc_opt_' + name + '.pkl', 'wb')
+    pkl_file = open(os.path.join(HYPER_DIR, 'rc_opt_' + name + '.pkl'), 'wb')
     pickle.dump(optimizer.max, pkl_file)
     pkl_file.close()
 
@@ -138,9 +145,13 @@ if phase == 'Training':
     ax0.set_ylabel('data_amoc')
     ax1.set_ylabel('param')
     ax1.set_xlabel('t')
-    plt.show()
+    data_figure_path = os.path.join(FIGURE_DIR, f'{name}_data.png')
+    fig.tight_layout()
+    fig.savefig(data_figure_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f'Saved data figure to {data_figure_path}')
     
-    pkl_file = open('./hyperparameter/rc_opt_' + name + '.pkl', 'rb')
+    pkl_file = open(os.path.join(HYPER_DIR, 'rc_opt_' + name + '.pkl'), 'rb')
     opt_results = pickle.load(pkl_file)
     pkl_file.close()
     opt_params = opt_results['params']
@@ -195,8 +206,11 @@ if phase == 'Training':
     ax1.plot(vali_real[:, 0], label='data_amoc real')
     ax1.plot(vali_pred[:, 0], label='data_amoc pred', linestyle='--')
     ax1.legend()
-    plt.legend()
-    plt.show()
+    fig.tight_layout()
+    result_figure_path = os.path.join(FIGURE_DIR, f'{name}_training.png')
+    fig.savefig(result_figure_path, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+    print(f'Saved training figure to {result_figure_path}')
 
 
 

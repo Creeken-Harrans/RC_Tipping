@@ -2,6 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import rc
+import os
+
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+FIGURE_DIR = os.path.join(BASE_DIR, 'figures')
 
 
 
@@ -90,7 +96,11 @@ def amoc_2d(A = 1.33, m = 0, lambda0 = -2.7, t0 = 0, tf = 150, dt = 8e-2, Hmax =
         ax2.tick_params(axis='both', which='major', labelsize=12)
 
         plt.tight_layout()
-        plt.show()
+        os.makedirs(FIGURE_DIR, exist_ok=True)
+        figure_path = os.path.join(FIGURE_DIR, 'amoc_2d_generated.png')
+        fig.savefig(figure_path, dpi=300, bbox_inches='tight')
+        plt.close(fig)
+        print(f'Saved generated data figure to {figure_path}')
         return np.transpose(X)
     
     
@@ -98,7 +108,8 @@ def amoc_2d(A = 1.33, m = 0, lambda0 = -2.7, t0 = 0, tf = 150, dt = 8e-2, Hmax =
 def d2pkl(name, data):
     dim = np.shape(data)[1]
     df = pd.DataFrame(data)
-    df.to_pickle(f'data/{name}.pkl')
+    os.makedirs(DATA_DIR, exist_ok=True)
+    df.to_pickle(os.path.join(DATA_DIR, f'{name}.pkl'))
     
     
     
